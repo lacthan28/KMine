@@ -1,5 +1,6 @@
 package kmine.event
 
+import kmine.Server
 import kmine.writeln
 import java.io.File
 import java.io.PrintWriter
@@ -34,7 +35,7 @@ class TimingsHandler(var name: String, var parent: TimingsHandler? = null) {
 
                     var entities = 0
                     var livingEntities = 0
-                    //foreach
+                    //Server.instance.levels.forEach{}
                 }
             }
         }

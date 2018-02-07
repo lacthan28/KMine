@@ -1,5 +1,7 @@
 package kmine
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import java.io.PrintWriter
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -18,7 +20,7 @@ fun PrintWriter.writeln(string: String) {
     this.write("\n")
 }
 
-fun List<String>.pop(): String {
+fun <T> List<T>.pop(): T {
     val str = this[0]
     this.toMutableList().removeAt(0)
     return str
@@ -30,4 +32,8 @@ fun Date.createDateFromFormat(format: SimpleDateFormat, time: String = ""): Date
     } else this
     format.format(date)
     return date
+}
+
+fun String.jsonDecodeToArray(): List<String> {
+    return Gson().fromJson(this, Array<String>::class.java).toList()
 }

@@ -1,15 +1,13 @@
 package kmine.permission
 
-import com.oracle.tools.packager.Log
-import kmine.createDateFromFormat
-import kmine.pop
+import kmine.utils.createDateFromFormat
+import kmine.utils.pop
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 
 class BanEntry(name: String) {
     companion object {
-        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z")
+        val format: SimpleDateFormat by lazy { SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z") }
 
         fun fromString(str: String): BanEntry? {
             if (str.length < 2) return null

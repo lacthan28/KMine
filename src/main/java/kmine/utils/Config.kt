@@ -1,9 +1,6 @@
 package kmine.utils
 
-import com.google.gson.Gson
 import kmine.jsonDecode
-import kmine.jsonDecodeToArray
-import kmine.pop
 import java.io.File
 
 class Config(file: String, type: Int = Config.DETECT, default: List<String> = emptyList(), var correct: Boolean = false) {

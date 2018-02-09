@@ -1,15 +1,21 @@
 package kmine.level.format
 
-class Chunk {
+class Chunk(chunkX: Int, chunkZ: Int,
+            subChunks: List<String> = emptyList(),
+            entities: List<String> = emptyList(),
+            tiles: List<String> = emptyList(),
+            biomeIds: String = "",
+            heightMap: Array<Int> = emptyArray(),
+            var extraData: List<Int> = emptyList()) {
     companion object {
         const val MAX_SUBCHUNKS = 16
     }
+    //this.height = Chunk.MAX_SUBCHUNKS
+    /** @var int */
+    var x: Int = chunkX
 
     /** @var int */
-    private var x: Int = -1
-
-    /** @var int */
-    private var z: Int = -1
+    var z: Int = chunkZ
 
     /** @var bool */
     protected var hasChanged = false
@@ -25,13 +31,12 @@ class Chunk {
     protected var terrainPopulated = false
 
     /** @var int */
-    protected var height = Chunk.MAX_SUBCHUNKS
+    var height = Chunk.MAX_SUBCHUNKS
 
     /** @var \SplFixedArray|SubChunkInterface[] */
-    protected lateinit var subChunks: List<SubChunkInterface>
+    protected var subChunks: List<SubChunkInterface>
 
-    /** @var EmptySubChunk */
-    protected lateinit var emptySubChunk: EmptySubChunk
+    private var emptySubChunk = EmptySubChunk()
 
     /** @var Tile[] */
     protected var tiles: List<Tile> = emptyList()
@@ -42,32 +47,54 @@ class Chunk {
     protected var entities: List<Entity> = emptyList()
 
     /** @var int[] */
-    protected var heightMap: List<Int> = emptyList()
+    protected var heightMap: Array<Int> = emptyArray()
 
     /** @var string */
     protected var biomeIds: String = ""
 
-    /** @var int[] */
-    protected var extraData: List<Int> = emptyList()
+    /** @var CompoundTag[] */
+    protected var NBTtiles: List<CompoundTag> = tiles
 
     /** @var CompoundTag[] */
-    protected var NBTtiles: List<CompoundTag> = emptyList()
+    protected var NBTentities: List<CompoundTag> = entities
 
-    /** @var CompoundTag[] */
-    protected var NBTentities: List<CompoundTag> = emptyList()
-
-    constructor(chunkX: Int, chunkZ: Int,
-                subChunks: List<String> = emptyList(),
-                entities: List<String> = emptyList(),
-                tiles: List<String> = emptyList(),
-                biomeIds: String = "",
-                heightMap: List<String> = emptyList(),
-                extraData: List<String> = emptyList()) {
-        this.x = chunkX
-        this.z = chunkZ
-
-//        this.height = Chunk.MAX_SUBCHUNKS
-
-        this.subChunks = List(this.height, SubChunkInterface::class.java)
+    init {
+        this.subChunks = List(this.height, { EmptySubChunk() })
+        if (heightMap.count() == 256)
+            this.heightMap = heightMap
+        else {
+            assert(heightMap.count() == 0, { "Wrong HeightMap value count, expected 256, got ${heightMap.count()}" })
+            val `val` = this.height * 16
+            this.heightMap.fill(`val`, 0, 256)
+        }
+        if (biomeIds.length == 256)
+            this.biomeIds = biomeIds
+        else {
+            assert(biomeIds.count() == 0, { "Wrong HeightMap value count, expected 256, got ${biomeIds.count()}" })
+            this.biomeIds = "\\x00".repeat(256)
+        }
     }
+
+    fun getFullBlock(x: Int, y: Int, z: Int): Int = this.getSubChunk(y.shr(4), true)
+            .getFullBlock(x, y and 0x0f, z)
+
+    fun setBlock(x: Int, y: Int, z: Int, blockId: Int? = null, meta: Int? = null): Boolean {
+        if (this.getSubChunk(y.shr(4), true).setBlock(x, y and 0x0f, z,
+                        if (blockId != null) blockId and 0xff else null,
+                        if (meta != null) meta and 0xff else null)) {
+            return true
+        }
+        return false
+    }
+
+    fun getBlockId(x:Int, y:Int, z:Int): Int = this.getSubChunk(y.shr(4)).getBlockId(x, y and 0x0f, z)
+
+    fun getSubChunk(y: Int, generateNew: Boolean = false): SubChunkInterface {
+        if (y < 0 || y >= this.height) return emptySubChunk
+        else if (generateNew && subChunks[y] is EmptySubChunk)
+            subChunks.getOrElse(y, defaultValue = SubChunks())
+
+        return subChunks[y]
+    }
+
 }

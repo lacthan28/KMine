@@ -1,9 +1,8 @@
 package kmine.permission
 
 import kmine.Server
-import kmine.writeln
+import kmine.utils.writeln
 import java.io.File
-import java.io.FileReader
 import java.text.SimpleDateFormat
 import java.util.*
 

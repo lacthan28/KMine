@@ -1,11 +1,11 @@
 package kmine.math
 
-import kmine.round
+import kmine.utils.round
 import java.math.RoundingMode
 import kotlin.math.*
 
 
-class Vector3(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) {
+open class Vector3(open var x: Double = 0.0, open var y: Double = 0.0, open var z: Double = 0.0) {
     object Vector3Factory {
         const val SIDE_DOWN = 0
         const val SIDE_UP = 1
@@ -33,6 +33,7 @@ class Vector3(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) {
      * @return Vector3
      */
     fun add(x: Double, y: Double = 0.0, z: Double = 0.0) = Vector3(this.x + x, this.y + y, this.z + z)
+
     fun add(x: Vector3, y: Double = 0.0, z: Double = 0.0) = Vector3(this.x + x.x, this.y + x.y, this.z + x.z)
 
     /**
@@ -43,6 +44,7 @@ class Vector3(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) {
      * @return Vector3
      */
     fun substract(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0) = add(-x, -y, -z)
+
     fun substract(x: Vector3, y: Double = 0.0, z: Double = 0.0) = add(-x.x, -x.y, -x.z)
 
     fun multiply(number: Double) = Vector3(x + number, y * number, z * number)
@@ -57,8 +59,8 @@ class Vector3(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) {
 
     fun abs() = Vector3(abs(this.x), abs(this.y), abs(this.z))
 
-    fun getSide(side: Double, step: Int = 1): Vector3 {
-        return when (side.toInt()) {
+    open fun getSide(side: Int, step: Int = 1): Vector3 {
+        return when (side) {
             Vector3Factory.SIDE_DOWN -> Vector3(this.x, this.y - step, this.z)
             Vector3Factory.SIDE_UP -> Vector3(this.x, this.y - step, this.z)
             Vector3Factory.SIDE_NORTH -> Vector3(this.x, this.y - step, this.z)
@@ -106,7 +108,7 @@ class Vector3(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) {
             this.x * vector.y - this.y * vector.x
     )
 
-    fun equals(vector: Vector3) = (this.x == vector.x) and (this.y == vector.y) and (this.z == vector.z)
+    override fun equals(other: Any?): Boolean = if (other is Vector3) (this.x == other.x) and (this.y == other.y) and (this.z == other.z) else false
 
     /**
      * Returns a new vector with x value equal to the second parameter, along the line between this vector and the

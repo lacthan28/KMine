@@ -1,7 +1,6 @@
-package kmine
+package kmine.utils
 
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import java.io.PrintWriter
 import java.math.BigDecimal
 import java.math.RoundingMode

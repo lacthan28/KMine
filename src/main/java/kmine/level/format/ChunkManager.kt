@@ -10,7 +10,7 @@ interface ChunkManager {
      *
      * @return int 0-255
      */
-    fun getBlockIdAt(x : Int, y : Int, z : Int) : int
+    fun getBlockIdAt(x: Int, y: Int, z: Int): Int
 
     /**
      * Sets the raw block id.
@@ -20,7 +20,7 @@ interface ChunkManager {
      * @param z : Int
      * @param int $id 0-255
      */
-    fun setBlockIdAt(x : Int, y : Int, z : Int, int $id)
+    fun setBlockIdAt(x: Int, y: Int, z: Int, id: Int)
 
     /**
      * Gets the raw block metadata
@@ -31,7 +31,7 @@ interface ChunkManager {
      *
      * @return int 0-15
      */
-    fun getBlockDataAt(x : Int, y : Int, z : Int) : int
+    fun getBlockDataAt(x: Int, y: Int, z: Int): Int
 
     /**
      * Sets the raw block metadata.
@@ -41,7 +41,7 @@ interface ChunkManager {
      * @param z : Int
      * @param int $data 0-15
      */
-    fun setBlockDataAt(x : Int, y : Int, z : Int, int $data)
+    fun setBlockDataAt(x: Int, y: Int, z: Int, data: Int)
 
     /**
      * Returns the raw block light level
@@ -52,7 +52,7 @@ interface ChunkManager {
      *
      * @return int
      */
-    fun getBlockLightAt(x : Int, y : Int, z : Int) : int
+    fun getBlockLightAt(x: Int, y: Int, z: Int): Int
 
     /**
      * Sets the raw block light level
@@ -62,7 +62,7 @@ interface ChunkManager {
      * @param z : Int
      * @param level : Int
      */
-    fun setBlockLightAt(x : Int, y : Int, z : Int, level : Int)
+    fun setBlockLightAt(x: Int, y: Int, z: Int, level: Int)
 
     /**
      * Returns the highest amount of sky light can reach the specified coordinates.
@@ -73,7 +73,7 @@ interface ChunkManager {
      *
      * @return int
      */
-    fun getBlockSkyLightAt(x : Int, y : Int, z : Int) : int
+    fun getBlockSkyLightAt(x: Int, y: Int, z: Int): Int
 
     /**
      * Sets the raw block sky light level.
@@ -83,7 +83,7 @@ interface ChunkManager {
      * @param z : Int
      * @param level : Int
      */
-    fun setBlockSkyLightAt(x : Int, y : Int, z : Int, level : Int)
+    fun setBlockSkyLightAt(x: Int, y: Int, z: Int, level: Int)
 
     /**
      * @param chunkX : Int
@@ -91,27 +91,27 @@ interface ChunkManager {
      *
      * @return Chunk|null
      */
-    fun getChunk(chunkX : Int, chunkZ : Int)
+    fun getChunk(chunkX: Int, chunkZ: Int): Chunk?
 
     /**
      * @param int        $chunkX
      * @param int        $chunkZ
      * @param Chunk|null $chunk
      */
-    fun setChunk(chunkX : Int, chunkZ : Int, Chunk $chunk = null)
+    fun setChunk(chunkX: Int, chunkZ: Int, chunk: Chunk? = null)
 
     /**
      * Gets the level seed
      *
      * @return int
      */
-    fun getSeed() : int
+    fun getSeed(): Int
 
     /**
      * Returns the height of the world
      * @return int
      */
-    fun getWorldHeight() : int
+    fun getWorldHeight(): Int
 
     /**
      * Returns whether the specified coordinates are within the valid world boundaries, taking world format limitations
@@ -123,5 +123,5 @@ interface ChunkManager {
      *
      * @return bool
      */
-    fun isInWorld(float $x, float $y, float $z) : bool
+    fun isInWorld(x: Float, y: Float, z: Float): Boolean
 }

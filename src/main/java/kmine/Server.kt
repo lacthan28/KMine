@@ -20,5 +20,4 @@ class Server {
         val sleeper: Thread? = null
     }
 
-
 }

@@ -1,5 +1,7 @@
 package kmine.metadata
 
+import kmine.plugin.Plugin
+
 interface Metadatable {
     /**
      * Sets a metadata value in the implementing object's metadata store.
@@ -7,6 +9,7 @@ interface Metadatable {
      * @param metadataKey String
      * @param newMetadataValue MetadataValue
      */
+    @Throws(Exception::class)
     fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue)
 
     /**
@@ -17,7 +20,8 @@ interface Metadatable {
      *
      * @return MetadataValue[]
      */
-    fun getMetadata(metadataKey: String): Array<MetadataValue>
+    @Throws(Exception::class)
+    fun getMetadata(metadataKey: String): List<MetadataValue>
 
     /**
      * Tests to see whether the implementing object contains the given
@@ -27,6 +31,7 @@ interface Metadatable {
      *
      * @return Boolean
      */
+    @Throws(Exception::class)
     fun hasMetadata(metadataKey: String): Boolean
 
     /**
@@ -36,5 +41,6 @@ interface Metadatable {
      * @param metadataKey String
      * @param owningPlugin Plugin
      */
+    @Throws(Exception::class)
     fun removeMetadata(metadataKey: String, owningPlugin: Plugin)
 }

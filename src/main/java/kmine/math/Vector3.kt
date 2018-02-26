@@ -1,188 +1,269 @@
 package kmine.math
 
-import kmine.utils.round
-import java.math.RoundingMode
-import kotlin.math.*
+class Vector3: Cloneable {
 
+    var x: Double = 0.toDouble()
+    var y: Double = 0.toDouble()
+    var z: Double = 0.toDouble()
 
-open class Vector3(open var x: Double = 0.0, open var y: Double = 0.0, open var z: Double = 0.0) {
-    object Vector3Factory {
-        const val SIDE_DOWN = 0
-        const val SIDE_UP = 1
-        const val SIDE_NORTH = 2
-        const val SIDE_SOUTH = 3
-        const val SIDE_WEST = 4
-        const val SIDE_EAST = 5
+    constructor(){
+        Vector3(0.0, 0.0, 0.0)
     }
 
-    val floorX: Int = floor(x).toInt()
-    val floorY: Int = floor(y).toInt()
-    val floorZ: Int = floor(z).toInt()
-
-    val right = x
-    val up = y
-    val forward = z
-    val south = x
-    val west = z
-
-    /**
-     * @param x Int|Vector3
-     * @param y Int
-     * @param z Int
-     *
-     * @return Vector3
-     */
-    fun add(x: Double, y: Double = 0.0, z: Double = 0.0) = Vector3(this.x + x, this.y + y, this.z + z)
-
-    fun add(x: Vector3, y: Double = 0.0, z: Double = 0.0) = Vector3(this.x + x.x, this.y + x.y, this.z + x.z)
-
-    /**
-     * @param x Int
-     * @param y Int
-     * @param z Int
-     *
-     * @return Vector3
-     */
-    fun substract(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0) = add(-x, -y, -z)
-
-    fun substract(x: Vector3, y: Double = 0.0, z: Double = 0.0) = add(-x.x, -x.y, -x.z)
-
-    fun multiply(number: Double) = Vector3(x + number, y * number, z * number)
-
-    fun divide(number: Double) = Vector3(x / number, y / number, z / number)
-
-    fun ceil() = Vector3(ceil(x), ceil(y), ceil(z))
-
-    fun floor() = Vector3(floorX.toDouble(), floorY.toDouble(), floorZ.toDouble())
-
-    fun round(precision: Int = 0, mode: RoundingMode = RoundingMode.HALF_UP) = Vector3(this.x.round(precision, mode), this.y.round(precision, mode), this.z.round(precision, mode))
-
-    fun abs() = Vector3(abs(this.x), abs(this.y), abs(this.z))
-
-    open fun getSide(side: Int, step: Int = 1): Vector3 {
-        return when (side) {
-            Vector3Factory.SIDE_DOWN -> Vector3(this.x, this.y - step, this.z)
-            Vector3Factory.SIDE_UP -> Vector3(this.x, this.y - step, this.z)
-            Vector3Factory.SIDE_NORTH -> Vector3(this.x, this.y - step, this.z)
-            Vector3Factory.SIDE_SOUTH -> Vector3(this.x, this.y - step, this.z)
-            Vector3Factory.SIDE_WEST -> Vector3(this.x, this.y - step, this.z)
-            Vector3Factory.SIDE_EAST -> Vector3(this.x, this.y - step, this.z)
-            else -> this
-        }
+    constructor(x: Double) {
+        Vector3(x, 0.0, 0.0)
     }
 
-    /**
-     * Return a Vector3 instance
-     *
-     * @return Vector3
-     */
-    fun asVector3() = Vector3(this.x, this.y, this.z)
+    constructor(x: Double, y: Double) {
+        Vector3(x, y, 0.0)
+    }
 
-    fun distance(pos: Vector3) = sqrt(distanceSquared(pos))
+    constructor(x: Double, y: Double, z: Double) {
+        this.x = x
+        this.y = y
+        this.z = z
+    }
 
-    private fun distanceSquared(pos: Vector3) = ((this.x - pos.x).pow(2) + (this.y - pos.y).pow(2) + (this.z - pos.z).pow(2))
+    fun getFloorX(): Int {
+        return Math.floor(this.x).toInt()
+    }
 
-    fun maxPlainDistance(x: Vector3, z: Double = 0.0) = maxPlainDistance(x.x, x.z)
+    fun getFloorY(): Int {
+        return Math.floor(this.y).toInt()
+    }
 
-    fun maxPlainDistance(x: Vector2, z: Double = 0.0) = maxPlainDistance(x.x, x.y)
+    fun getFloorZ(): Int {
+        return Math.floor(this.z).toInt()
+    }
 
-    fun maxPlainDistance(x: Double = 0.0, z: Double = 0.0) = max(abs(this.x - x), abs(this.z - z))
+    fun getRight(): Double {
+        return this.x
+    }
 
-    fun length() = sqrt(lengthSquared())
+    fun getUp(): Double {
+        return this.y
+    }
 
-    fun lengthSquared() = this.x * this.x + this.y * this.y + this.z * this.z
+    fun getForward(): Double {
+        return this.z
+    }
 
-    /**
-     * @return Vector3
-     */
+    fun getSouth(): Double {
+        return this.x
+    }
+
+    fun getWest(): Double {
+        return this.z
+    }
+
+    fun add(x: Double, y: Double = 0.0, z: Double = 0.0): Vector3 {
+        return Vector3(this.x + x, this.y + y, this.z + z)
+    }
+
+    fun add(x: Vector3): Vector3 {
+        return Vector3(this.x + x.x, this.y + x.y, this.z + x.z)
+    }
+
+    fun subtract(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0): Vector3 {
+        return this.add(-x, -y, -z)
+    }
+
+    fun subtract(x: Vector3): Vector3 {
+        return this.add(-x.x, -x.y, -x.z)
+    }
+
+    fun multiply(number: Double): Vector3 {
+        return Vector3(this.x * number, this.y * number, this.z * number)
+    }
+
+    fun divide(number: Double): Vector3 {
+        return Vector3(this.x / number, this.y / number, this.z / number)
+    }
+
+    fun ceil(): Vector3 {
+        return Vector3(Math.ceil(this.x).toInt().toDouble(), Math.ceil(this.y).toInt().toDouble(), Math.ceil(this.z).toInt().toDouble())
+    }
+
+    fun floor(): Vector3 {
+        return Vector3(this.getFloorX().toDouble(), this.getFloorY().toDouble(), this.getFloorZ().toDouble())
+    }
+
+    fun round(): Vector3 {
+        return Vector3(Math.round(this.x).toDouble(), Math.round(this.y).toDouble(), Math.round(this.z).toDouble())
+    }
+
+    fun abs(): Vector3 {
+        return Vector3(Math.abs(this.x).toInt().toDouble(), Math.abs(this.y).toInt().toDouble(), Math.abs(this.z).toInt().toDouble())
+    }
+
+    fun getSide(face: BlockFace): Vector3 {
+        return this.getSide(face, 1)
+    }
+
+    fun getSide(face: BlockFace, step: Int): Vector3 {
+        return Vector3(this.x + face.getXOffset() * step, this.y + face.getYOffset() * step, this.z + face.getZOffset() * step)
+    }
+
+    fun up(): Vector3 {
+        return up(1)
+    }
+
+    fun up(step: Int): Vector3 {
+        return getSide(BlockFace.UP, step)
+    }
+
+    fun down(): Vector3 {
+        return down(1)
+    }
+
+    fun down(step: Int): Vector3 {
+        return getSide(BlockFace.DOWN, step)
+    }
+
+    fun north(): Vector3 {
+        return north(1)
+    }
+
+    fun north(step: Int): Vector3 {
+        return getSide(BlockFace.NORTH, step)
+    }
+
+    fun south(): Vector3 {
+        return south(1)
+    }
+
+    fun south(step: Int): Vector3 {
+        return getSide(BlockFace.SOUTH, step)
+    }
+
+    fun east(): Vector3 {
+        return east(1)
+    }
+
+    fun east(step: Int): Vector3 {
+        return getSide(BlockFace.EAST, step)
+    }
+
+    fun west(): Vector3 {
+        return west(1)
+    }
+
+    fun west(step: Int): Vector3 {
+        return getSide(BlockFace.WEST, step)
+    }
+
+    fun distance(pos: Vector3): Double {
+        return Math.sqrt(this.distanceSquared(pos))
+    }
+
+    fun distanceSquared(pos: Vector3): Double {
+        return Math.pow(this.x - pos.x, 2.0) + Math.pow(this.y - pos.y, 2.0) + Math.pow(this.z - pos.z, 2.0)
+    }
+
+    fun maxPlainDistance(): Double {
+        return this.maxPlainDistance(0.0, 0.0)
+    }
+
+    fun maxPlainDistance(x: Double): Double {
+        return this.maxPlainDistance(x, 0.0)
+    }
+
+    fun maxPlainDistance(x: Double, z: Double): Double {
+        return Math.max(Math.abs(this.x - x), Math.abs(this.z - z))
+    }
+
+    fun maxPlainDistance(vector: Vector2): Double {
+        return this.maxPlainDistance(vector.x, vector.y)
+    }
+
+    fun maxPlainDistance(x: Vector3): Double {
+        return this.maxPlainDistance(x.x, x.z)
+    }
+
+    fun length(): Double {
+        return Math.sqrt(this.lengthSquared())
+    }
+
+    fun lengthSquared(): Double {
+        return this.x * this.x + this.y * this.y + this.z * this.z
+    }
+
     fun normalize(): Vector3 {
         val len = this.lengthSquared()
-        return if (len > 0) this.divide(sqrt(len)) else Vector3()
+        return if (len > 0) {
+            this.divide(Math.sqrt(len))
+        } else Vector3(0.0, 0.0, 0.0)
     }
 
-    fun dot(vector: Vector3) = this.x * vector.x + this.y * vector.y + this.z * vector.z
+    fun dot(v: Vector3): Double {
+        return this.x * v.x + this.y * v.y + this.z * v.z
+    }
 
-    fun cross(vector: Vector3) = Vector3(
-            this.y * vector.z - this.z * vector.y,
-            this.z * vector.x - this.x * vector.z,
-            this.x * vector.y - this.y * vector.x
-    )
-
-    override fun equals(other: Any?): Boolean = if (other is Vector3) (this.x == other.x) and (this.y == other.y) and (this.z == other.z) else false
+    fun cross(v: Vector3): Vector3 {
+        return Vector3(
+                this.y * v.z - this.z * v.y,
+                this.z * v.x - this.x * v.z,
+                this.x * v.y - this.y * v.x
+        )
+    }
 
     /**
      * Returns a new vector with x value equal to the second parameter, along the line between this vector and the
      * passed in vector, or null if not possible.
-     *
-     * @param vector Vector3
-     * @param x Double
-     *
-     * @return Vector3|null
      */
-    fun getIntermediateWithXValue(vector: Vector3, x: Double): Vector3? {
-        val xDiff = vector.x - this.x
-        val yDiff = vector.y - this.y
-        val zDiff = vector.z - this.z
-
-        if ((xDiff * xDiff) < 0.0000001) return null
-
+    fun getIntermediateWithXValue(v: Vector3, x: Double): Vector3? {
+        val xDiff = v.x - this.x
+        val yDiff = v.y - this.y
+        val zDiff = v.z - this.z
+        if (xDiff * xDiff < 0.0000001) {
+            return null
+        }
         val f = (x - this.x) / xDiff
-
-        return if ((f < 0) or (f > 1)) null
-        else Vector3(x, this.y + yDiff * f, this.z + zDiff * f)
+        return if (f < 0 || f > 1) {
+            null
+        } else {
+            Vector3(this.x + xDiff * f, this.y + yDiff * f, this.z + zDiff * f)
+        }
     }
 
     /**
      * Returns a new vector with y value equal to the second parameter, along the line between this vector and the
      * passed in vector, or null if not possible.
-     *
-     * @param vector Vector3
-     * @param y Double
-     *
-     * @return Vector3|null
      */
-    fun getIntermediateWithYValue(vector: Vector3, y: Double): Vector3? {
-        val xDiff = vector.x - this.x
-        val yDiff = vector.y - this.y
-        val zDiff = vector.z - this.z
-
-        if ((yDiff * yDiff) < 0.0000001) return null
-
+    fun getIntermediateWithYValue(v: Vector3, y: Double): Vector3? {
+        val xDiff = v.x - this.x
+        val yDiff = v.y - this.y
+        val zDiff = v.z - this.z
+        if (yDiff * yDiff < 0.0000001) {
+            return null
+        }
         val f = (y - this.y) / yDiff
-
-        return if ((f < 0) or (f > 1)) null
-        else Vector3(this.x + xDiff * f, y, this.z + zDiff * f)
+        return if (f < 0 || f > 1) {
+            null
+        } else {
+            Vector3(this.x + xDiff * f, this.y + yDiff * f, this.z + zDiff * f)
+        }
     }
 
     /**
      * Returns a new vector with z value equal to the second parameter, along the line between this vector and the
      * passed in vector, or null if not possible.
-     *
-     * @param vector Vector3
-     * @param z Double
-     *
-     * @return Vector3|null
      */
-    fun getIntermediateWithZValue(vector: Vector3, z: Double): Vector3? {
-        val xDiff = vector.x - this.x
-        val yDiff = vector.y - this.y
-        val zDiff = vector.z - this.z
-
-        if ((zDiff * zDiff) < 0.0000001) return null
-
+    fun getIntermediateWithZValue(v: Vector3, z: Double): Vector3? {
+        val xDiff = v.x - this.x
+        val yDiff = v.y - this.y
+        val zDiff = v.z - this.z
+        if (zDiff * zDiff < 0.0000001) {
+            return null
+        }
         val f = (z - this.z) / zDiff
-
-        return if ((f < 0) or (f > 1)) null
-        else Vector3(this.x + xDiff * f, this.y + yDiff * f, z)
+        return if (f < 0 || f > 1) {
+            null
+        } else {
+            Vector3(this.x + xDiff * f, this.y + yDiff * f, this.z + zDiff * f)
+        }
     }
 
-    /**
-     * @param x
-     * @param y
-     * @param z
-     *
-     * @return $this
-     */
     fun setComponents(x: Double, y: Double, z: Double): Vector3 {
         this.x = x
         this.y = y
@@ -191,22 +272,41 @@ open class Vector3(open var x: Double = 0.0, open var y: Double = 0.0, open var 
     }
 
     override fun toString(): String {
-        return "Vector3(x = $x, y = $y, z = $z)"
+        return "Vector3(x=" + this.x + ",y=" + this.y + ",z=" + this.z + ")"
     }
 
-    companion object {
-        /**
-         * Returns the Vector3 side number opposite the specified one
-         *
-         * @param side Int 0-5 one of the Vector3::SIDE_* constants
-         * @return int
-         *
-         * @throws \InvalidArgumentException if an invalid side is supplied
-         */
-        fun getOppositeSide(side: Int): Int {
-            if (side in 0..5) return side xor 0x01
-            throw IllegalArgumentException("Invalid side $side given to getOppositeSide")
+    override fun equals(obj: Any?): Boolean {
+        if (obj !is Vector3) {
+            return false
         }
+
+        val other = obj as Vector3?
+
+        return this.x == other!!.x && this.y == other.y && this.z == other.z
     }
 
+    override fun hashCode(): Int {
+        return x.toInt() xor (z.toInt() shl 12) xor (y.toInt() shl 24)
+    }
+
+    fun rawHashCode(): Int {
+        return super.hashCode()
+    }
+
+    override fun clone(): Any {
+        return try {
+            super.clone()
+        } catch (e: CloneNotSupportedException) {
+            ""
+        }
+
+    }
+
+    fun asVector3f(): Vector3f {
+        return Vector3f(this.x.toFloat(), this.y.toFloat(), this.z.toFloat())
+    }
+
+    fun asBlockVector3(): BlockVector3 {
+        return BlockVector3(this.getFloorX(), this.getFloorY(), this.getFloorZ())
+    }
 }
